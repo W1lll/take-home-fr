@@ -2,7 +2,7 @@
   <ion-menu side="start" menuId="first" [type]="menuType" contentId="main">
     <div class="wrapper">
 
-      <div class="account margin-bottom-l">
+      <div class="account margin-bottom-s">
         <div id="account-img-placeholder" *ngIf="!user.account.logo">
           {{user.account.name[0] | uppercase}}
         </div>
@@ -18,16 +18,14 @@
           <span class="material-symbols-outlined" translate="no">dataset</span>
           <span class="text">Products</span>
         </a>
-
-
       </div>
 
       <div class="brand">
         <img *ngIf="env.screenType == 'desktop'" src="assets/fliproom_logo_white.svg" alt="">
         <img *ngIf="env.screenType == 'mobile'" src="assets/fliproom_logo-text_white.svg" alt="">
-
         <span>{{env.appVersion}}</span>
       </div>
+
     </div>
   </ion-menu>
   <ion-router-outlet id="main"></ion-router-outlet>
