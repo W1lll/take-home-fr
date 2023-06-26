@@ -266,7 +266,7 @@
  *  ANGULAR THEMING
  *
  */
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 @include mat-core();
 
 // apply angular theme http://mcg.mbitson.com/#!?mcgpalette0=%233f51b5
