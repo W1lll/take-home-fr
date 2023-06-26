@@ -26,3 +26,18 @@ td {
     max-height: 2em;
   }
 }
+
+ion-content {
+  padding: 1em;
+}
+
+ion-header {
+  padding: 1em;
+  ion-title {
+    margin: 0;
+    padding: 0;
+  }
+  ion-segment-button {
+    margin: 0;
+  }
+}

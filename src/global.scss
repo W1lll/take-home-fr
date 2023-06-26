@@ -1055,7 +1055,7 @@ div.table-wrapper {
   padding: 0 !important;
   height: 80vh;
   overflow-y: scroll;
-  border-radius: var(--ion-border-radius);
+  // border-radius: var(--ion-border-radius);
 
   &::-webkit-scrollbar {
     display: none;
