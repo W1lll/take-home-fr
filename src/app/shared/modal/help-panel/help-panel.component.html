@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Help</h1>
+<div mat-dialog-content>
+    <ion-accordion-group [value]="resources[0].id">
+        <ion-accordion [value]="resource.id" *ngFor="let resource of resources">
+          <ion-item slot="header" color="light">
+            <ion-label>{{resource.title}}</ion-label>
+          </ion-item>
+          <div slot="content">
+              <iframe [src]="resources[0].url" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </ion-accordion>
+    </ion-accordion-group>
+</div>
+<div mat-dialog-actions>
+</div>

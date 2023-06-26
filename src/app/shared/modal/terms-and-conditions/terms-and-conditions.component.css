@@ -1,0 +1,4 @@
+div.modal-body {
+    max-height: 40vh;
+    overflow-y: scroll;
+}

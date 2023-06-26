@@ -1,0 +1,2 @@
+export const USERSNAP_GLOBAL_API_KEY = "d33b42bf-41af-43b1-881c-9b625e302ef4"
+export const USERSNAP_PROJECT_API_KEY = "11c1b405-092a-4f6b-bc35-d45286caf5fe"

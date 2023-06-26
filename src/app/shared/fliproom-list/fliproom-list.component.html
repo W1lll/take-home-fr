@@ -1,0 +1,27 @@
+<ion-refresher slot="fixed" pullFactor="0.5" (ionRefresh)="onScrollRefresh($event)">
+</ion-refresher>
+
+<fliproom-searchbar (onSearch)="onSearch($event)" test-id="fliproom-list-search" [value]="activeSearch"></fliproom-searchbar>
+
+<div class="loading-placeholder" *ngIf="isLoading">
+  <ion-spinner name="crescent"></ion-spinner>
+</div>
+
+<div *ngIf="dataSource.data.length === 0 && (emptyListPlaceholder || placeholderButtonText) && !isLoading" class="no-data-con">
+  <p>
+    {{emptyListPlaceholder}}
+    <a class="button margin-top-s" *ngIf="placeholderButtonText" (click)="onPlaceholderButtonClick.emit()">{{placeholderButtonText | titlecase}}</a>
+  </p>
+</div>
+
+<ion-list *ngIf="!isLoading">
+  <ion-card *ngFor="let element of dataSource.data" button (click)="onRowClicked(element)" class="margin-bottom">
+    <ng-container *ngTemplateOutlet="itemListTmpl, context: { $implicit: element }"></ng-container>
+  </ion-card>
+
+  <ion-infinite-scroll threshold="100px"  (ionInfinite)="onLoadMoreData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="crescent">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-list>

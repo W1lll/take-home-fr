@@ -1,0 +1,153 @@
+
+
+div.table-toolsbar {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+
+  mat-paginator {
+    background-color: transparent !important;
+
+    ::ng-deep div.mat-paginator-range-label {
+      font-weight: bold;
+      color: var(--ion-color-dark);
+    }
+
+    ::ng-deep div.mat-paginator-page-size-label {
+      font-weight: normal;
+    }
+  }
+
+  div.line-1, div.line-2 {
+    display: flex;
+    align-items: center;
+  }
+
+  div.line-1 {
+    flex-direction: row-reverse;
+
+    button.icon-button {
+      margin-left: 1em;
+    }
+
+    fliproom-searchbar {
+      margin: auto;
+      margin-left: 0;
+      width: 20vw;
+
+      ::ng-deep mat-form-field div.mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  button.table-clear-filters {
+    margin-left: 1em;
+  }
+}
+
+
+
+
+
+
+::ng-deep div.operators-list button {
+  color: grey !important;
+}
+
+::ng-deep div.operators-list button.operator-selected
+{
+  color: black !important;
+  font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+/**
+ * LOADING PROGRESS
+ */
+tr.loading-progress-row {
+    height: fit-content;
+}
+
+tr.loading-progress-row th {
+    padding: 0;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+    background-color: var(--loading-alternate) !important;
+}
+
+/**
+ * PLACEHOLDER
+ */
+tr.placeholder-row td {
+    text-align: center;
+}
+
+/*TABLE ROWS */
+/*Rows Normal Table*/
+
+/*
+table.custom tr.mat-row {
+  min-height: auto;
+  padding: 0.5em 0;
+}
+
+table.custom tr.mat-row.hovered:hover{
+  background-color:  var(--light-grey);
+}
+
+::ng-deep table.custom div.mat-sort-header-arrow {
+  color: white !important;
+}
+
+table.custom tr.mat-row td.mat-cell {
+  min-height: auto;
+  padding-right: 0.5em;
+}
+
+.cell-placeholder {
+  color: grey; font-style: italic;
+}
+*/
+
+/**
+ *   TABLE COLUMNS SELECTION
+ */
+div.table-columns-selection-wrapper {
+  padding: 1em;
+}
+
+div.table-columns-selection-wrapper h6 {
+  font-size: 1.15em;
+  font-weight: 500;
+}
+
+div.checkboxes-wrapper {
+  max-height: 50vh;
+}
+
+
+/**
+ * STYLING
+ */
+
+tr.highlight {
+  animation: highlight 2s;
+}
+
+@keyframes highlight {
+  0% {
+      background:rgba(255, 255, 0, 0);
+  }
+  25% {background: var(--primary-color)}
+  100% {background:rgba(255, 255, 0, 0);}
+}

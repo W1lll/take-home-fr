@@ -1,0 +1,16 @@
+::ng-deep fliproom-searchbar mat-form-field {
+  padding: 1em 8px; // 8px on the sides to match with the ion-list padding
+}
+
+div.loading-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+
+
+ion-infinite-scroll {
+  grid-column: 1 / span 2;
+}

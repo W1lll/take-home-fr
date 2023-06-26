@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <span class="material-symbols-outlined" translate="no" (click)="onClose()">arrow_back</span>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Products</ion-title>
+  </ion-toolbar>
+  <ion-segment (ionChange)="onSegmentChanged()" [(ngModel)]="catalogueSelected" #cataloguesTabs [scrollable]="true" mode="ios" *ngIf="catalogues.length > 1" >
+    <ion-segment-button *ngFor="let catalogue of catalogues"  [value]="catalogue">
+      <ion-label>{{tabDisplayName(catalogue) | titlecase}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+<ion-content>
+  <fliproom-list class="product-list"  #fliproomList
+  (onDataRequest)="onDataRequest($event)"
+  [dataRequested]="dataRequested"
+  (onRowClick)="onRowClick($event)"
+  [emptyListPlaceholder]="noDataDisplayMessage"
+  [prefilledSearchText]="prefilledSearchText">
+    <ng-template #itemList let-element>
+      <div class="product-card-image-wrapper-container">
+        <div class="product-card-image-wrapper">
+          <img [src]="element.imageReference" onerror="this.src = './assets/images/placeholder.png';"/>
+        </div>
+      </div>
+      <ion-card-content [attr.test-id]="element.ID">
+        <span class="sub-title">{{element.code | uppercase}}</span>
+        <span class="title">{{element.title | titlecase}}</span>
+        <div class="tags-list">
+          <span class="tag" color="primary" *ngIf="catalogueSelected == 'consignment'">{{element.account.name}}</span>
+        </div>
+      </ion-card-content>
+    </ng-template>
+  </fliproom-list>
+  <p class="center" *ngIf="catalogueSelected == 'private' &&  showNoDataButton">
+    <a class="button" *ngIf="placeholderButtonText" (click)="onPlaceholderButtonClick(!consignmentProductsAvailable ?'create': 'goto-consignment')">{{placeholderButtonText }}</a>
+  </p>
+
+  <p class="center" *ngIf="catalogueSelected == 'consignment' &&  showNoDataButton ">
+    <a class="button" *ngIf="placeholderButtonText" (click)="onPlaceholderButtonClick('create')">{{placeholderButtonText}}</a>
+  </p>
+
+  <p class="center" *ngIf="catalogueSelected == 'public' && data?.private == false   && showNoDataButton">
+    <a class="button" *ngIf="placeholderButtonText" (click)="onPlaceholderButtonClick('import')">{{placeholderButtonText}}</a>
+  </p>
+
+  <p class="center" *ngIf="catalogueSelected == 'public' && data?.private != false && showNoDataButton">
+    <a class="button" *ngIf="placeholderButtonText" (click)="onPlaceholderButtonClick('import')">{{placeholderButtonText }}</a>
+    <br><br>
+    or
+    <br><br>
+    <a class="button" (click)="onPlaceholderButtonClick('create')">Create New Product</a>
+  </p>
+</ion-content>

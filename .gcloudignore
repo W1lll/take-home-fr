@@ -1,0 +1,8 @@
+.angular/*
+android/*
+e2e/*
+ios/*
+node_modules/*
+resources/*
+src/*
+www/svg/*

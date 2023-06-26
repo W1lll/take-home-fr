@@ -1,0 +1,6 @@
+<mat-form-field appearance="fill">
+  <mat-label>Search</mat-label>
+  <mat-icon matPrefix>search</mat-icon>
+  <input matInput placeholder="Search" #searchInput (input)="onKeystroke($event)" [value]="inputValue" autocomplete="off" test-id="search">
+  <mat-icon matSuffix *ngIf="searchInput.value != ''" (click)="searchInput.value = ''; onKeystroke($event)" test-id="close">close</mat-icon>
+</mat-form-field>

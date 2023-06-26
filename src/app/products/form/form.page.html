@@ -1,0 +1,183 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button  mode="md"></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="formType">{{formType == "create" ? 'Create Product' : 'Update Product'}}</ion-title>
+    <ion-buttons slot="end">
+      <div *ngIf="formType == 'create' && environment.screenType == 'desktop'">
+        <button mat-button (click)="onUseTemplate()"  test-id="template-btn" color="primary" class="margin-right">
+          <mat-icon>{{'bolt'}}</mat-icon>
+          Use Template</button>
+        <button mat-button (click)="onSubmit()" test-id="submit" [class.loading]="isLoadingAction" color="primary"> <mat-icon>done</mat-icon>
+          {{' Create'}}</button>
+      </div>
+      <button mat-button *ngIf="product && product.foreignID && environment.screenType == 'desktop'"   (click)="commerceRedirect()" color="primary">
+        <mat-icon>open_in_new</mat-icon>
+        {{' E-Commerce'}}
+      </button>
+
+      <button mat-button *ngIf="   formType == 'update' && environment.screenType == 'desktop'"  test-id="save" [class.loading]="isLoadingAction" (click)="onSave()" color="primary">
+        <mat-icon>done</mat-icon>
+        {{' Save'}}
+      </button>
+
+      <ion-button *ngIf="formType == 'create' && environment.screenType == 'mobile'"  test-id="form-options" (click)="onOptionsClick()">
+        <!-- <ion-icon  slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical" ></ion-icon> -->
+        <mat-icon>more_vert</mat-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #content>
+  <div class="loading-placeholder" *ngIf="isLoadingData">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  <form [formGroup]="productForm" autocomplete="off" >
+    <div class="product-form-grid" [ngClass]="{'product-form-grid': environment.screenType != 'mobile'}">
+      <div class="form-section">
+        <div class="form-section-toolbar">
+          <h2>{{'Product Images' | titlecase}}</h2>
+        </div>
+        <div class="image-container dragging-container " cdkDropList cdkDropListOrientation="horizontal" cdkDrop
+             (cdkDropListDropped)="drop($event, imagesToDisplay)">
+          <div class="image-view-card draggable-component" *ngFor="let image of imagesToDisplay ; let i = index;"
+               (click)="removeImage(i)" cdkDrag>
+            <div class="centered-image-text">
+              <mat-icon>close</mat-icon>
+            </div>
+            <div class="overlay flex-centered"></div>
+            <img class="image-view-card " [src]="image.url">
+          </div>
+          <div matRipple class="card-outline" id="add-image-card" (click)="imageInput.click()"
+               *ngIf="imagesToDisplay.length != maxImages">
+            <div class="add-image-card-content ">
+              <input #imageInput  test-id="image-input" [hidden]="true" type="file"  accept="image/x-png,image/gif,image/jpeg, image/webp" (change)="onFileUploaded($event)" multiple>
+              <mat-icon color="secondary-grey" class="icon-display">add</mat-icon>
+            </div>
+          </div>
+        </div>
+        <!--        <mat-hint *ngIf="warehouseForm.get('images')!.invalid && warehouseForm.get('images')!.touched && warehouseImages.length == 0">{{'At least one image is required'}}</mat-hint>-->
+        <div class="form-section-toolbar">
+        <h2>{{'Product Information' | titlecase}}</h2>
+        </div>
+        <mat-form-field appearance="fill" >
+          <mat-label>{{'Title' | titlecase}}</mat-label>
+          <input matInput id="title"  test-id="title" type="text" autocomplete="null" formControlName="title" maxlength=500>
+        </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>{{'Code' | titlecase}}</mat-label>
+            <input matInput id="code" type="text"  test-id="code" autocomplete="null" formControlName="code" maxlength=50>
+          </mat-form-field>
+
+
+        <div class="two-cell-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>{{'Weight (Kg)' | titlecase}}</mat-label>
+            <input matInput id="weight" type="number"  test-id="weight" autocomplete="null" formControlName="weight" maxlength=50>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>{{'Volume (Cbm)' | titlecase}}</mat-label>
+            <input matInput id="volume" type="number"  test-id="volume" autocomplete="null" formControlName="volume" maxlength=50>
+          </mat-form-field>
+        </div>
+        <div class="rich-text-container">
+          <ckeditor [editor]="Editor" [config]="editorConfig" formControlName="description" data="<p>Hello, world!</p>"></ckeditor>
+        </div>
+        <div class="two-cell-grid">
+        <mat-form-field appearance="fill" >
+          <mat-label>{{'status' | titlecase}}</mat-label>
+          <mat-select formControlName="status"  test-id="status">
+            <mat-option *ngFor="let status of productStatusList" [value]="status" >
+              {{status | titlecase}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill">
+          <mat-label>{{'Category'  | titlecase}}</mat-label>
+          <input matInput #categorySearch type="search" autocomplete="null"  test-id="category" formControlName="category" class="uppercase" autocomplete="off" [matAutocomplete]="autoCompleteProductCategorySearch">
+          <mat-icon matSuffix *ngIf="productForm.get('category').value" (click)="productForm.get('category').reset()"></mat-icon>
+          <mat-autocomplete #autoCompleteProductCategorySearch="matAutocomplete" [displayWith]="displayProductCategoryFn">
+            <mat-option  (click)="onNewProductCategory()" class="button">New Category</mat-option>
+            <mat-option *ngFor="let productCategory of filteredProductCategories | async" [value]="productCategory">{{productCategory.name | uppercase}}</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        </div>
+        <div [ngClass]="{'two-cell-grid': productForm.value.sourceProduct}">
+          <mat-slide-toggle #sync formControlName='sync' test-id="sync" (change)="onSyncToggle(sync.checked)">Product Sync</mat-slide-toggle>
+
+          <mat-form-field *ngIf="productForm.value.sourceProduct " appearance="fill" (click)="onSyncProductChange()" class="clickable" >
+            <mat-label>{{productForm.value.sourceProduct.code ? productForm.value.sourceProduct.code : 'NO SKU' | uppercase}}</mat-label>
+            <input matInput [readonly]='true' type="text" autocomplete="null" test-id="synced-product" [value]="productForm.value.sourceProduct['title']" maxlength=50>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div  class="form-section">
+        <div class="variants-container" #scrollVariants>
+          <div class="form-section-toolbar">
+            <h2 class="margin-bottom-xs">{{'Variants' | titlecase}}</h2>
+            <div class="centred-container display-right">
+              <a class="button" (click)="addProductVariant(null,false,true)" test-id="add-variant">Add</a>
+            </div>
+          </div>
+          <div class="margin-bottom-s">
+            <mat-chip-list class="margin-bottom">
+              <mat-chip id="popover-button" color="primary" class="icon-tag primary button" (click)="openSizeChartForm()" >
+                <mat-icon class="tag-prefix-icon" matChipTrailingIcon>app_registration</mat-icon>
+                {{'Size Charts'}}
+              </mat-chip>
+              <mat-chip color="primary" class="icon-tag primary button" (click)="openGTINForm()" >
+                <mat-icon class="tag-prefix-icon" matChipTrailingIcon>clear_all</mat-icon>
+                {{'GTIN Codes'}}
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+
+          <div formArrayName="variants" class="dragging-container"  cdkDropList cdkDropListOrientation="vertical" cdkDrop (cdkDropListDropped)="dropVariant($event)">
+            <div class="variant-container dragging-container" test-id="variant" [ngClass]="{'sync': productForm.value.sourceProduct}" *ngFor="let variantForm of productForm.get('variants')['controls']; let i = index;" [formGroupName]="i" cdkDrag >
+              <div class="centred-container drag-icon-container">
+              <span class="material-symbols-outlined" translate="no" cdkDragHandle>
+              drag_indicator
+            </span>
+              </div>
+              <mat-form-field appearance="fill"  class="margin-bottom">
+                <mat-label>{{'Variant Name' | titlecase}}</mat-label>
+                <input matInput  type="text" [attr.variant]="variantForm.value.name" test-id="variant" autocomplete="null" formControlName="name" maxlength=100>
+              </mat-form-field>
+              <mat-form-field appearance="fill" *ngIf="productForm.value.sourceProduct">
+                <mat-label>{{'synced variant' | titlecase}}</mat-label>
+                <mat-select   [compareWith]="compareObjectsByIDFn" formControlName="sourceProductVariant" test-id="sync-variant-select" (selectionChange)="selectSyncedVariant($event.value, i)" >
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let sourceProductVariant of productForm.value.sourceProduct['variants']" [value]="sourceProductVariant" >
+                    {{sourceProductVariant | variant}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div class="centred-container draggable-component">
+                <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" [attr.variant-delete]="variantForm.value.name" (click)="removeProductVariant(i)" [disabled]="variantsArray.length == 1">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions margin-bottom ">
+        <button mat-flat-button *ngIf="formType == 'create' && environment.screenType == 'mobile'" class="margin-top"  test-id="submit" color="primary" (click)="onSubmit()" [class.loading]="isLoadingAction">Create</button>
+        <button mat-flat-button *ngIf="  formType == 'update' && environment.screenType == 'mobile'" test-id="save" class="margin-top" color="primary"  (click)="onSave()" [class.loading]="isLoadingAction">Save</button>
+
+      </div>
+
+    </div>
+  </form>
+
+</ion-content>

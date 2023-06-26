@@ -1,0 +1,10 @@
+mat-form-field {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: var(--ion-background-color);
+
+    ::ng-deep div.mat-form-field-wrapper {
+        padding-bottom: 0;
+    }
+}

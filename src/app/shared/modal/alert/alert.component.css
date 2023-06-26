@@ -1,0 +1,8 @@
+div.modal-body p {
+    white-space: break-spaces;
+}
+
+div.mat-dialog-actions {
+    display: flex;
+    flex-direction: row-reverse;
+}

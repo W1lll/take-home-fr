@@ -1,0 +1,18 @@
+img {
+    width: 5em;
+    margin: auto;
+    transform: scale(0);
+    animation-name: zoomIn;
+    animation-duration: 0.9s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+  }

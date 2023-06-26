@@ -1,0 +1,222 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" mode="md">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="help" (click)="onOpenHelp()">{{variantMode? 'Product Variants' : 'Products'}}</ion-title>
+    <ion-buttons slot="end" *ngIf="environment.screenType == 'desktop'">
+      <button mat-button (click)="onButtonClick(button.id)" color="primary" *ngFor="let button of buttons" [id]="button.id">
+        <mat-icon>{{button.icon}}</mat-icon>
+        {{button.label | titlecase}}</button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-segment (ionChange)="onSegmentChanged($event)" [value]="currentSelectedSegment"  [scrollable]="true" mode="ios">
+    <ion-segment-button [value]="tabName" *ngFor="let tabName of statusesTabsList" [id]="tabName">
+      <ion-label>{{tabName | titlecase}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="environment.screenType == 'mobile' && buttons.length > 0">
+    <ion-fab-button test-id="options">
+      <mat-icon>more_vert</mat-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button *ngFor="let button of buttons" (click)="onButtonClick(button.id)" color="primary" [id]="button.id" >
+        <mat-icon>{{button.icon}}</mat-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <div *ngIf="environment.screenType == 'mobile'">
+    <fliproom-list class="product-list"  #fliproomList (onDataRequest)="onDataRequest($event)" [dataRequested]="dataRequested" (onRowClick)="onRowClick($event)" [emptyListPlaceholder]="'No products available. Please create one'">
+      <ng-template #itemList let-element>
+        <div class="product-card-image-wrapper-container">
+          <div class="product-card-image-wrapper">
+            <img [src]=" variantMode ? element.product.imageReference: element.imageReference " onerror="this.src = './assets/images/placeholder.png';" />
+          </div>
+        </div>
+        <ion-card-content [attr.test-id]="element.ID">
+          <span class="sub-title">{{ variantMode ?  element.product.code : element.code | uppercase}}</span>
+          <span class="title">{{variantMode ?  element.product.title : element.title | titlecase}}</span>
+          <span *ngIf="variantMode" class="sub-title">{{element | variant | uppercase}}</span>
+        </ion-card-content>
+      </ng-template>
+    </fliproom-list>
+  </div>
+  <div class="desktop" *ngIf="environment.screenType == 'desktop' && !isLoading">
+    <!--PRODUCT VIEW TABLE COLUMNS-->
+    <table-wrapper *ngIf="!variantMode" #tableWrapper [configs]=tableConfigs (onDataRequest)="onDataRequest($event)"
+                   [dataRequested]="dataRequested" (onRowClick)="onRowClick($event)" matSort>
+      <ng-container matColumnDef="ID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.ID}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
+        <td mat-cell *matCellDef="let element"> {{element.createdAt | date:'d/M/yy hh:mm a'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let element" test-id="test-tags">
+          <span class="tag" [attr.color]="element.status == 'active' ? 'success' : 'warning'">{{(element.status) | uppercase}} </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+        <td mat-cell *matCellDef="let element"> {{element.code | uppercase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+        <td mat-cell *matCellDef="let element" test-id="title"> {{element.title}} </td>
+      </ng-container>
+      <ng-container matColumnDef="category.name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+        <td mat-cell *matCellDef="let element" test-id="title"> {{element.category.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sourceProductID">
+        <!--Removed sorting because of sequelize problem-->
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Synced ID</th>
+        <td mat-cell *matCellDef="let element" test-id="sourceProduct"> {{element.sourceProductID ? element.sourceProductID : ''  }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sourceProduct.title">
+        <!--Removed sorting because of sequelize problem-->
+        <th mat-header-cell *matHeaderCellDef > Synced Product </th>
+        <td mat-cell *matCellDef="let element" test-id="sourceProduct"> {{element.sourceProduct ? element.sourceProduct.title : ''  }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="imageReference">
+        <th mat-header-cell *matHeaderCellDef> Image </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="img-wrapper">
+            <img [src]="element.imageReference" alt="" onerror="this.src = './assets/images/placeholder.png';">
+          </div>
+        </td>
+      </ng-container>
+
+    </table-wrapper>
+
+    <!--VARIANT VIEW TABLE COLUMNS-->
+    <table-wrapper *ngIf="variantMode" #tableWrapper [configs]=tableConfigs (onDataRequest)="onDataRequest($event)"
+                   [dataRequested]="dataRequested" (onRowClick)="onRowClick($event.product)" matSort>
+      <ng-container matColumnDef="product.ID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.product.ID}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product.createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
+        <td mat-cell *matCellDef="let element"> {{element.product.createdAt | date:'d/M/yy hh:mm a'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product.status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Status </th>
+        <td mat-cell *matCellDef="let element" test-id="test-tags">
+          <span class="tag" [attr.color]="element.product.status == 'active' ? 'success' : 'warning'">{{(element.product.status) | uppercase}} </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product.code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+        <td mat-cell *matCellDef="let element"> {{element.product.code | uppercase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product.title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Title </th>
+        <td mat-cell *matCellDef="let element" test-id="title"> {{element.product.title}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product.category.name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+        <td mat-cell *matCellDef="let element" test-id="title"> {{element.product.category.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product.sourceProductID">
+        <!--Removed sorting because of sequelize problem-->
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Synced ProdID</th>
+        <td mat-cell *matCellDef="let element" test-id="sourceProduct"> {{element.product.sourceProductID ? element.product.sourceProductID : ''  }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product.sourceProduct.title">
+        <!--Removed sorting because of sequelize problem-->
+        <th mat-header-cell *matHeaderCellDef > Synced Product </th>
+        <td mat-cell *matCellDef="let element" test-id="sourceProduct"> {{element.product.sourceProduct ? element.product.sourceProduct.title : ''  }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="product.imageReference">
+        <th mat-header-cell *matHeaderCellDef> Image </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="img-wrapper">
+            <img [src]="element.product? element.product.imageReference: null" alt="" onerror="this.src = './assets/images/placeholder.png';">
+          </div>
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="ID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.ID}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element | variant}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="gtin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> GTIN </th>
+        <td mat-cell *matCellDef="let element"> {{element.gtin}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Idx </th>
+        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Lowest Price </th>
+        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sourceProductVariantID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Synced ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.sourceProductVariantID}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sourceProductVariant.name">
+        <!--Removed sorting because of sequelize problem-->
+        <th mat-header-cell *matHeaderCellDef > Synced Variant </th>
+        <td mat-cell *matCellDef="let element" > {{element.sourceProductVariant ? (element.sourceProductVariant | variant) : ''  }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sourceProductVariant.price">
+        <!--Removed sorting because of sequelize problem-->
+        <th mat-header-cell *matHeaderCellDef > Market Price </th>
+        <td mat-cell *matCellDef="let element" > {{element.sourceProductVariant ? element.sourceProductVariant.price : ''  }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sourceProductVariant.updatedAt">
+        <!--Removed sorting because of sequelize problem-->
+        <th mat-header-cell *matHeaderCellDef > Last Sync</th>
+        <td mat-cell *matCellDef="let element" > {{element.sourceProductVariant ? (element.sourceProductVariant.updatedAt | date:'d/M/yy hh:mm a') : ''  }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Variant Status </th>
+        <td mat-cell *matCellDef="let element" test-id="test-tags">
+          <span class="tag" [attr.color]="element.status == 'active' ? 'success' : 'warning'">{{(element.status) | uppercase}} </span>
+        </td>
+      </ng-container>
+
+    </table-wrapper>
+  </div>
+
+</ion-content>

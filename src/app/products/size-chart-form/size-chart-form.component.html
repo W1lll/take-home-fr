@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Size Chart Editor</ion-title>
+  </ion-toolbar>
+  <ion-segment (ionChange)="onSegmentChanged($event)" [value]="currentRegionsSelected[0]"  [scrollable]="true" mode="ios" *ngIf="environment.screenType == 'mobile'">
+    <ion-segment-button [value]="tabName" *ngFor="let tabName of sizeChartRegions" >
+      <ion-label>{{tabName | uppercase}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content (window:resize)="onResize($event)" >
+  <form [formGroup]="sizeChartForm" class="padding-s" >
+    <h6 class="no-margin">Displayed Name</h6>
+    <div formArrayName="variants" class="margin-top-s" >
+      <div test-id="variant"  *ngFor="let variantForm of  sizeChartForm.get('variants')['controls']; let i = index;" [formGroupName]="i" class="size-chart-grid" style="grid-template-columns: 3fr  repeat(3, 1fr);" [ngStyle]="{'grid-template-columns': environment.screenType == 'mobile'? '2fr 1fr':'3fr  repeat('+currentRegionsSelected.length+', 1fr)'} " >
+        <div class="flex-vertically-centered padding-bottom-s">{{(generateUpdatedVariant(variantForm.value)|variant) |uppercase}}</div>
+        <mat-form-field appearance="fill" *ngIf="isRegionSelected('uk')" >
+          <mat-label>{{'UK Size' }}</mat-label>
+          <input matInput  type="text" [attr.variant]="variantForm.value.name" test-id="uk-size" autocomplete="null" formControlName="ukSize" style="text-transform:uppercase" maxlength=100>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill"  *ngIf="isRegionSelected('eu')" >
+          <mat-label>{{'EU Size ' }}</mat-label>
+          <input matInput  type="text" [attr.variant]="variantForm.value.name" test-id="eu-size" autocomplete="null" formControlName="euSize" style="text-transform:uppercase" maxlength=100>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill"  *ngIf="isRegionSelected('us')" >
+          <mat-label>{{'US Size '}}</mat-label>
+          <input matInput  type="text" [attr.variant]="variantForm.value.name" test-id="us-size" autocomplete="null" formControlName="usSize" style="text-transform:uppercase" maxlength=100>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" *ngIf="isRegionSelected('jp')"  >
+          <mat-label>{{'JP Size ' }}</mat-label>
+          <input matInput  type="text" [attr.variant]="variantForm.value.name" test-id="jp-size" autocomplete="null" formControlName="jpSize" style="text-transform:uppercase" maxlength=100>
+        </mat-form-field>
+
+      </div>
+    </div>
+  </form>
+
+
+</ion-content>
+
+<ion-footer >
+  <button mat-stroked-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()" test-id="submit">Save</button>
+</ion-footer>

@@ -1,0 +1,35 @@
+<ion-split-pane contentId="main" when="(min-width: 901px)">
+  <ion-menu side="start" menuId="first" [type]="menuType" contentId="main">
+    <div class="wrapper">
+
+      <div class="account margin-bottom-l">
+        <div id="account-img-placeholder" *ngIf="!user.account.logo">
+          {{user.account.name[0] | uppercase}}
+        </div>
+        <img id="account-img" [src]="user.account.logoUrl" *ngIf="user.account.logo">
+        <div class="info" *ngIf="env.screenType == 'mobile'">
+          <span class="account-name">{{user.account.name | titlecase}}</span>
+          <span class="user-info small">{{user.fullName | titlecase}} ({{user.role.name | titlecase}})</span>
+        </div>
+      </div>
+
+      <div class="list">
+        <a class="button" id="products" [ngClass]="{'selected': selectedOption == 'products'}"  [routerLink]="['/products']"  (click)="onButtonClick('products')">
+          <span class="material-symbols-outlined" translate="no">dataset</span>
+          <span class="text">Products</span>
+        </a>
+
+
+      </div>
+
+      <div class="brand">
+        <img *ngIf="env.screenType == 'desktop'" src="assets/fliproom_logo_white.svg" alt="">
+        <img *ngIf="env.screenType == 'mobile'" src="assets/fliproom_logo-text_white.svg" alt="">
+
+        <span>{{env.appVersion}}</span>
+      </div>
+    </div>
+  </ion-menu>
+  <ion-router-outlet id="main"></ion-router-outlet>
+
+</ion-split-pane>

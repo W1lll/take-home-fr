@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Product GTIN Codes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  >
+  <form [formGroup]="gtinForm" class="padding-s" >
+    <h6 class="no-margin">Variant Name</h6>
+    <div formArrayName="variants" class="margin-top-s" >
+      <div test-id="variant"  *ngFor="let variantForm of  gtinForm.get('variants')['controls']; let i = index;" [formGroupName]="i" class="gtin-grid"   >
+        <div class="flex-vertically-centered padding-bottom-s">{{(generateUpdatedVariant(variantForm.value) |variant) |uppercase}}</div>
+        <mat-form-field appearance="fill" >
+          <mat-label>{{'GTIN' }}</mat-label>
+          <input matInput  type="text" [attr.variant]="variantForm.value.name" test-id="gtin" autocomplete="null" formControlName="gtin" style="text-transform:uppercase" maxlength=100>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+
+
+</ion-content>
+
+<ion-footer >
+  <button mat-stroked-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()" test-id="submit">Save</button>
+</ion-footer>

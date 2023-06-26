@@ -1,0 +1,1156 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+@use '@angular/material'as mat;
+
+// @import "~ngx-sharebuttons/themes/default.scss";
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+
+* {
+  //font-family: 'Comfortaa', cursive;
+  font-family: 'Roboto', sans-serif;
+}
+
+.padding-y-s {
+  padding: 1em 0em !important;
+}
+
+.padding-y {
+  padding: 2em 0em !important;
+}
+
+// General styling for reusability
+.padding-s {
+  padding: 1em !important;
+}
+
+.padding {
+  padding: 2em !important;
+}
+
+.padding-left-s {
+  padding-left: 1em !important;
+}
+
+.padding-left {
+  padding-left: 2em !important;
+}
+
+.padding-top-xs {
+  padding-top: 0.5em !important;
+}
+
+.padding-top-s {
+  padding-top: 1em !important;
+}
+
+.padding-top {
+  padding-top: 2em !important;
+}
+
+.padding-bottom-xs {
+  padding-bottom: 0.5em !important;
+}
+
+.padding-bottom-s {
+  padding-bottom: 1em !important;
+}
+
+.padding-bottom {
+  padding-bottom: 2em !important;
+}
+
+.padding-bottom-m {
+  padding-bottom: 3em !important;
+}
+
+.margin-top-xs {
+  margin-top: 0.5em !important;
+}
+
+.margin-top-s {
+  margin-top: 1em !important;
+}
+
+.margin-top {
+  margin-top: 2em !important;
+}
+
+.margin-top-l {
+  margin-top: 3em !important;
+}
+
+.margin-top-xl {
+  margin-top: 4em !important;
+}
+
+.margin-top-xxs {
+  margin-top: 0.25em !important;
+}
+
+.margin-right-xs {
+  margin-right: 0.5em !important;
+}
+
+.margin-right-s {
+  margin-right: 1em !important;
+}
+
+.margin-right {
+  margin-right: 2em !important;
+}
+
+.margin-right-l {
+  margin-right: 3em !important;
+}
+
+.margin-left-s {
+  margin-left: 1em !important;
+}
+
+.margin-left-xs {
+  margin-left: 0.5em !important;
+}
+
+.margin-left {
+  margin-left: 2em !important;
+}
+
+.margin-left-l {
+  margin-left: 3em !important;
+}
+
+.margin-bottom-xs {
+  margin-bottom: 0.5em !important;
+}
+
+.margin-bottom-s {
+  margin-bottom: 1em !important;
+}
+
+.margin-bottom {
+  margin-bottom: 2em !important;
+}
+
+.margin-bottom-l {
+  margin-bottom: 3em !important;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-split {
+  display: flex;
+  justify-content: space-between;
+}
+
+.display-right {
+  float: right;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0em;
+}
+
+.no-margin {
+  margin: 0em;
+}
+
+no-padding {
+  padding: 0em;
+}
+
+.margin-bottom-l {
+  margin-bottom: 3em !important;
+}
+
+.center {
+  text-align: center !important;
+}
+
+.footer-buttons {
+  position: fixed;
+  left: 15px;
+  bottom: 1em;
+  right: 15px;
+}
+
+.flex-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-vertically-centered {
+  display: flex;
+
+  align-items: center;
+}
+
+.flex-split {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.vertically-centered {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.col-span-2 {
+  grid-column: 1 / span 2;
+}
+
+.col-span-3 {
+  grid-column: 1 / span 3;
+}
+
+.col-span-4 {
+  grid-column: 1 / span 4;
+}
+
+span.small {
+  font-size: var(--ion-font-size-s) !important;
+}
+
+span.large {
+  font-size: var(--ion-font-size-l) !important;
+}
+
+span.xlarge {
+  font-size: var(--ion-font-size-xl) !important;
+}
+
+.bold {
+  font-weight: 700 !important;
+}
+
+.italics {
+  font-style: italic;
+}
+
+.break-text-line {
+  white-space: break-spaces !important;
+}
+
+.grey {
+  color: var(--ion-color-grey);
+}
+
+
+
+[color="primary"] {
+  color: var(--ion-color-primary);
+}
+
+[color="success"] {
+  color: var(--ion-color-success) !important;
+}
+
+[color="warning"] {
+  color: var(--ion-color-warning) !important;
+}
+
+[color="grey"] {
+  background-color: var(--ion-color-grey-light);
+}
+
+[color="error"] {
+  color: var(--ion-color-danger) !important;
+}
+
+button img {
+  // Reduce size of images inside buttons as prefix or suffix
+  height: 1.5em;
+}
+
+table td.image {
+  // Reduce size of images inside table
+  width: 75px;
+  height: 50px;
+  margin-right: 0.5em;
+}
+
+// end general styling for reusability
+
+
+//
+// Customized elements
+// a.button
+// div.header
+// .info-grid
+// span.tags and .tags-list
+// .loading-placeholder
+// button.loading
+// body.scanner-active - needed for the plugin to work
+// ckeditor
+
+//
+
+a.button {
+  display: inline-flex;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--ion-color-primary);
+  padding: 0em 1em;
+  font-size: 14px;
+  align-items: center;
+  border-radius: var(--ion-border-radius);
+}
+
+.two-cell-grid {
+  display: grid;
+  grid-column: 2;
+  column-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+
+a.button span {
+  margin-right: 0.5em;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+// header
+div.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+//info grid
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 1em;
+
+  span.key {
+    color: var(--ion-color-grey);
+  }
+
+  span.value {
+    font-weight: 700;
+  }
+}
+
+span.key {
+  color: var(--ion-color-grey);
+}
+
+span.value {
+  font-weight: 700;
+}
+
+div.tags-list {
+  display: flex;
+  overflow-y: hidden;
+}
+
+
+.icon-tag {
+  padding-right: 12px !important;
+
+  .tag-prefix-icon {
+    margin-left: 0px !important;
+    margin-right: 2px !important;
+  }
+}
+
+.icon-tag.primary {
+  color: var(--ion-color-primary) !important;
+  background-color: var(--ion-field-background) !important;
+}
+
+div.icon-info-list {
+  padding-top: 5px;
+  display: flex;
+  overflow-y: hidden;
+}
+
+div.icon-info {
+  display: flex;
+  justify-content: center;
+  margin-right: 1em;
+
+  mat-icon {
+    color: var(--ion-color-primary);
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 20px;
+  }
+
+  span {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+}
+
+
+
+span.tag {
+  margin: 0.5em 1em 0.5em 0;
+  border-radius: var(--ion-border-radius);
+  text-transform: uppercase;
+  font-size: var(--ion-font-size-s);
+  padding: 5px 10px;
+  width: fit-content;
+  display: inline-block;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+span.tag[color="warning"] {
+  background-color: rgba(255, 123, 0, 0.3);
+  color: #FF7A00;
+}
+
+span.tag[color="success"] {
+  background-color: rgba(0, 156, 16, 0.3);
+  color: #009C10;
+}
+
+span.tag[color="error"] {
+  background-color: rgba(187, 2, 2, 0.3);
+  color: #a20000;
+}
+
+span.tag[color="primary"] {
+  background-color: rgba(0, 71, 253, 0.3);
+  color: var(--ion-color-primary);
+}
+
+span.tag[color="grey"] {
+  background-color: rgb(135, 136, 138, 0.3);
+  color: var(--ion-color-grey);
+}
+
+div.loading-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: -webkit-fill-available;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+button.loading {
+  cursor: default;
+  pointer-events: none;
+
+  // buttons with background
+  &.mat-flat-button.mat-primary {
+    span.mat-button-wrapper {
+      color: var(--ion-color-primary); // hide button text during loading
+    }
+
+    span.mat-button-wrapper::before {
+      border: 2px solid transparent;
+      border-top-color: var(--ion-color-light);
+    }
+  }
+
+  // text buttons
+  span.mat-button-wrapper {
+    color: var(--ion-background-color); // hide button text during loading
+    display: inline-block;
+    position: relative;
+  }
+
+  span.mat-button-wrapper::before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid var(--ion-color-grey-light);
+    border-top-color: var(--ion-color-dark);
+    animation: spinner .8s linear infinite;
+  }
+}
+
+body.scanner-active {
+  background: transparent;
+
+  ion-router-outlet {
+    display: none;
+  }
+
+  span#barcode-scanner-close {
+    display: block;
+  }
+}
+
+ckeditor {
+  max-height: 20vh !important;
+  border-radius: 1em;
+  overflow-y: scroll;
+  display: block;
+}
+
+body.dark-theme ckeditor {
+  color: black;
+}
+
+span#barcode-scanner-close {
+  // interface to allow abort barcode scanner camera open
+  position: absolute;
+  top: 4em;
+  right: 1em;
+  display: none;
+  font-size: 130%;
+  font-weight: bold;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+//
+// ionic changes
+//
+ion-content {
+  --padding-start: 15px;
+  --padding-end: 15px;
+}
+
+ion-header {
+  background-color: var(--ion-background-color);
+
+  ion-toolbar {
+    --background: transparent;
+    --border-width: 0 !important;
+    padding-bottom: 0.5em;
+
+    ion-title {
+      font-size: 1.5em;
+    }
+
+    ion-title.help {
+      width: fit-content;
+
+      &::after {
+        font-family: 'Material Icons';
+        content: "help";
+        margin: 0px 0px 0px 10px;
+        color: var(--ion-color-grey);
+        text-decoration: none;
+      }
+    }
+
+    ion-buttons[slot="end"]>button {
+      margin-right: 1em !important;
+
+      @media screen and (min-width: 900px) {
+        color: var(--ion-text-color);
+      }
+    }
+
+    ion-menu-button {
+      color: var(--ion-color-dark);
+    }
+  }
+
+  &::after {
+    display: none; // remove bottom border
+  }
+
+}
+
+ion-card {
+  margin: 0;
+  color: var(--ion-color-dark);
+  box-shadow: var(--ion-box-shadow);
+
+  .card-content-md,
+  .card-content-ios {
+    font-size: var(--ion-font-size);
+    font-weight: unset;
+  }
+
+  span.suffix {
+    display: inline-block;
+    width: 100%;
+    padding: 0.5em;
+  }
+
+  span.barcode {
+    background-color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
+
+ion-card.template1 {
+  div.container {
+    display: flex;
+  }
+
+  div.container .card-image-wrapper {
+    width: auto;
+  }
+
+  div.container img {
+    margin-top: auto;
+    margin-bottom: auto;
+    max-width: 7em;
+  }
+
+
+
+  ion-card-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+
+    div.section1 {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+  }
+}
+
+//PRODUCT CARD STYLING
+
+div.product-card-image-wrapper-container {
+  display: flex;
+}
+
+div.product-card-image-wrapper {
+  display: flex;
+  width: 100%;
+  flex-shrink: 0;
+  height: 10em;
+  background-color: white;
+
+  img {
+    width: 100%;
+    max-width: 100%;
+    height: 10em;
+    object-fit: contain;
+    margin: auto;
+  }
+}
+
+div.product-card-image-wrapper-sm {
+  @extend .product-card-image-wrapper;
+  width: 25%;
+}
+
+::ng-deep ion-list {
+  background: transparent !important;
+}
+
+/**
+  FORM STYLING
+ */
+
+.form-section-toolbar {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.centred-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+ion-card {
+  .title {
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+
+  .alt-title {
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .sub-title {
+    text-transform: uppercase;
+    color: var(--ion-color-grey);
+    font-weight: 600;
+  }
+
+  .sub-title-small {
+    text-transform: uppercase;
+    font-size: 10px;
+    color: var(--ion-color-grey);
+    font-weight: 600;
+  }
+}
+
+ion-action-sheet {
+  div.action-sheet-group {
+    border-radius: var(--ion-border-radius) var(--ion-border-radius) 0 0;
+  }
+
+  div.action-sheet-title {
+    text-transform: capitalize;
+    color: var(--ion-color-dark) !important;
+    font-weight: bold;
+    padding-bottom: 2em !important;
+  }
+
+  button.action-sheet-button {
+    text-transform: capitalize;
+  }
+
+  button.disabled {
+    cursor: not-allowed;
+    color: var(--ion-color-grey-light) !important;
+  }
+}
+
+ion-list {
+  background: transparent !important;
+  padding: 8px !important;
+}
+
+// toast
+ion-toast.success {
+  text-transform: capitalize;
+  --background: var(--ion-color-success);
+  --color: var(--ion-color-success-contrast);
+  --button-color: var(--ion-color-success-contrast);
+}
+
+ion-toast.warning {
+  text-transform: capitalize;
+  --background: var(--ion-color-warning);
+  --color: var(--ion-color-warning-contrast);
+  --button-color: var(--ion-color-warning-contrast);
+}
+
+ion-toast.error {
+  text-transform: capitalize;
+  --background: var(--ion-color-danger);
+  --color: var(--ion-color-danger-contrast);
+  --button-color: var(--ion-color-danger-contrast);
+}
+
+ion-modal {
+  background-color: #00000054;
+  color: var(--ion-color-dark) !important;
+
+  &.full-screen::part(content) {
+    width: 100%;
+    height: 100%;
+  }
+
+  &.full-screen-y::part(content) {
+    height: 100%;
+  }
+
+  &.custom::part(content) {
+    height: fit-content;
+    max-width: 80%; // don't stretch full screen x axis on mobile
+  }
+
+  &.custom .ion-page {
+    padding: 0 2em;
+    margin-bottom: 1em;
+  }
+
+  div.mat-dialog-actions {
+    margin-top: 2em;
+  }
+
+  ion-footer {
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+
+    &::before {
+      display: none;
+    }
+
+    button:first-child {
+      width: inherit;
+      margin-right: 1em; //TODO: remove why is this needed when our footer has padding already - Ruben. no used for spacing uon-footer that have two buttons: cancel and submit - Stefano
+    }
+
+    button:last-child {
+      width: inherit;
+      margin-left: 1em; //TODO: remove why is this needed when our footer has padding already - Ruben. no used for spacing uon-footer that have two buttons: cancel and submit - Stefano
+    }
+  }
+}
+
+.title-image-card {
+  ion-card-header {
+    text-align: left;
+  }
+}
+
+ion-segment {
+  --background: transparent;
+  margin-bottom: 0.5em;
+
+  ion-segment-button.segment-button-checked {
+    font-weight: bold;
+    color: var(--ion-color-dark);
+
+  }
+
+  ion-segment-button:not(.segment-button-checked) {
+    color: var(--ion-color-medium);
+  }
+
+  ion-segment-button {
+    --indicator-color: var(--ion-color-light);
+    margin: 0 0.5em;
+  }
+
+  ion-segment-button:hover {
+    color: var(--ion-color-dark);
+
+    &::part(native) {
+      opacity: 1;
+    }
+  }
+
+  ion-segment-button::before {
+    display: none;
+  }
+
+  &>* {
+    font-size: var(--ion-font-size);
+    text-transform: capitalize;
+  }
+}
+
+//
+// angular material changes
+//
+
+// Reduce size of mat-form field
+mat-form-field {
+
+  min-width: 0;
+  width: 100%;
+  font-size: var(--ion-font-size) !important;
+
+  &.mat-form-field-appearance-fill {
+    div.mat-form-field-underline {
+      display: none; //remove underline line for fill
+    }
+
+    div.mat-form-field-flex {
+      border-radius: 10px;
+      padding: 0.5em 0.75em 0 0.75em;
+    }
+
+    div.mat-form-field-infix {
+      padding: 0 0 0.5em 0;
+    }
+  }
+
+  &.mat-form-field-invalid {
+    div.mat-form-field-flex {
+      border: 1px solid red;
+    }
+  }
+
+
+  div.mat-form-field-prefix {
+    margin-right: 0.5em;
+  }
+
+  div.mat-form-field-suffix {
+    margin-left: 0.5em;
+  }
+
+  .mat-form-field-subscript-wrapper {
+    margin-top: 1em !important;
+    position: relative;
+  }
+
+}
+
+
+.disabled {
+  opacity: 0.4;
+}
+
+mat-hint {
+  font-size: 12px; // hardcode it so that it can be used outside mat-form-field (for radio group for example)
+  color: var(--ion-color-danger) !important;
+
+  &.info {
+    color: var(--ion-color-grey) !important;
+  }
+
+  &.warning {
+    color: var(--ion-color-warning) !important;
+  }
+
+  &.success {
+    color: var(--ion-color-success) !important;
+  }
+}
+
+mat-slide-toggle {
+  width: 100%;
+  font-size: var(--ion-font-size) !important;
+  margin-bottom: 1.34375em; // same as mat-form-field bottom padding
+  padding: 1em;
+  border-radius: 10px;
+  background-color: var(--ion-field-background);
+
+  &.mat-checked {
+    span.mat-slide-toggle-bar {
+      background-color: var(--ion-color-primary-dark) !important;
+    }
+  }
+
+  &.mat-slide-toggle {
+    height: auto;
+  }
+
+  label {
+    flex-direction: row-reverse !important;
+    justify-content: space-between;
+
+    .mat-slide-toggle-thumb-container span.mat-slide-toggle-thumb {
+      background-color: var(--ion-color-primary);
+    }
+  }
+}
+
+// Card Information layout
+.card-item-info {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+
+  .info-body-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .info-body-three {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .info-pair {
+    text-align: start;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    font-size: 12px;
+
+    .title {
+      text-transform: uppercase;
+      font-weight: bold;
+      color: var(--ion-color-primary);
+    }
+  }
+
+  .horizontal-appendix {
+    color: var(--ion-color-primary);
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: end;
+
+    div {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    mat-icon {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+  }
+
+}
+
+
+
+
+// EMPTY MESSAGE STYLING - used on fliproom-list and in other empty ion-list areas
+div.no-data-con {
+  height: 50px;
+  width: 100%;
+
+  p {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ion-color-grey-light);
+    font-style: italic;
+
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+mat-progress-bar {
+  border-radius: 2px;
+
+  div.mat-progress-bar-buffer {
+    background-color: var(--ion-color-grey-light) !important;
+  }
+
+  .mat-progress-bar-fill::after {
+    border-radius: 2px;
+  }
+}
+
+
+div.table-wrapper {
+  /** used to handle when too many rows*/
+  width: 100%;
+  box-shadow: var(--ion-box-shadow);
+  padding: 0 !important;
+  height: 80vh;
+  overflow-y: scroll;
+  border-radius: var(--ion-border-radius);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+mat-paginator {
+
+  div.mat-paginator-container {
+    align-items: baseline;
+  }
+
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    height: 0;
+  }
+
+  div.mat-paginator-page-size-label {
+    font-weight: bold;
+    color: var(--ion-color-dark);
+  }
+
+}
+
+//CARD STYLING
+ion-card {
+  border-radius: var(--border-radius);
+}
+
+.card-image-wrapper {
+  display: flex;
+  background-color: white;
+}
+
+
+table {
+  width: 100%;
+  background: var(--ion-card-background) !important;
+  overflow: auto;
+
+  thead {
+    position: sticky;
+    top: 0;
+    background: var(--ion-card-background) !important;
+
+    th.mat-header-cell {
+      border: none;
+    }
+  }
+
+  tbody {
+    tr {
+      &:nth-child(odd) {
+        background: var(--ion-color-light-tint) !important;
+      }
+
+      td {
+        padding-right: 1em !important;
+        border-bottom: 0px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+    }
+  }
+
+}
+
+table.custom {
+  tr.advanced-filters {
+    input {
+      background-color: var(--light-grey);
+      padding: 0.5em;
+      border-radius: 1em;
+    }
+
+    div.date-input {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    div.string-input {
+      display: flex;
+      align-items: center;
+      color: grey;
+    }
+
+    div.number-input {
+      display: flex;
+      justify-content: space-between;
+
+      input {
+        width: 33%;
+      }
+    }
+  }
+
+
+
+}

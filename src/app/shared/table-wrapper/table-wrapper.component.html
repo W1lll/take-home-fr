@@ -1,0 +1,140 @@
+<div class="table-toolsbar">
+  <div class="line-1">
+    <!-- PAGINATOR -->
+    <mat-paginator [pageSizeOptions]="paginatorConfigs.pageSizeOptions" [length]="paginatorConfigs.length" [pageSize]="paginatorConfigs.pageSize" showFirstLastButtons></mat-paginator>
+
+    <!-- COLUMN SELECTION MENU -->
+    <div *ngIf="configs.showColumnsSelection" class="table-columns-selection-container">
+      <button mat-button [matMenuTriggerFor]="tableColumnsFilter" class="icon-button table-columns-selection-button" matTooltip="Select Columns to Display">
+        <mat-icon>view_column</mat-icon>
+      </button>
+      <mat-menu #tableColumnsFilter="matMenu">
+        <div class="table-columns-selection-wrapper">
+          <h6>Table Columns</h6>
+
+          <div class="checkboxes-wrapper">
+            <div *ngFor="let columnConfig of configs.columnsConfig">
+              <mat-checkbox [checked]="displayedColumns.includes(columnConfig.reference)"
+                            (click)="$event.stopPropagation()"
+                            (change)="onShowColumnChange($event.source.checked, columnConfig)">
+                {{columnConfig.displayedName | titlecase}}
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </mat-menu>
+    </div>
+
+    <!-- DOWNLOAD BUTTON -->
+    <button mat-button class="icon-button" [ngClass]="{'loading': isTableDownloading}" [disabled]="isTableDownloading" matTooltip="Download Results" (click)="onTableDownload()">
+      <mat-icon>download</mat-icon>
+    </button>
+
+    <!-- SEARCH BAR -->
+    <fliproom-searchbar [value]="activeSearch" (onSearch)="onSearch($event)"></fliproom-searchbar>
+  </div>
+
+  <div class="line-2">
+    <!-- ACTIVE FILTERS CHIPS -->
+    <div>
+      <mat-chip-list class="active-filters">
+        <mat-chip *ngFor="let filter of activeFilters" color="primary">
+          {{filter.operator}}
+          {{filter.columnName}}: {{filter.dataType == 'date' ? (filter.value1 | date) +  (filter.value2 ? ' - ' + (filter.value2 | date) :  '') : filter.value1 + (filter.value2 ? ' - ' + filter.value2 :  '')}}
+          <mat-icon matChipRemove (click)="onClearFilter(filter)">cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+
+    <!-- CLEAR FILTERS BUTTON -->
+    <button mat-button *ngIf="activeFilters.length > 0" class="table-clear-filters" (click)="clearFilters()" test-id="clear-filters">
+      Clear Filters
+    </button>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table class="custom" mat-table [dataSource]="dataSource" matSort [multiTemplateDataRows]="configs.rowExpandable" >
+    <ng-container matColumnDef="selector">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox [attr.test-id]="element.ID" (click)="$event.stopPropagation()" (change)="toggleSelection(element)" [checked]="isSelected(element)"></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-content></ng-content>
+
+    <form [formGroup]="filters" test-id="advanced-filter"  autocomplete="off" *ngIf="configs.columnsConfig ? configs.columnsConfig.length > 0: false">
+      <!-- Generate filter columns -->
+      <ng-container *ngFor="let columnConfig of configs.columnsConfig" [matColumnDef]="'filter.' + columnConfig.reference" [formGroupName]="columnConfig.reference">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="string-input" *ngIf="columnConfig.disableFilter != true && filters.controls[columnConfig.reference].value.filterType == 'search'">
+            <input matInput placeholder="Search" class="header-filter" [attr.header-filter]="columnConfig.reference" #filterInput autocomplete="off" formControlName="value1" *ngIf="filters.controls[columnConfig.reference].value.operator != '*' && filters.controls[columnConfig.reference].value.operator != '!*'">
+            <span *ngIf="filters.controls[columnConfig.reference].value.operator == '*'">IS NOT EMPTY</span>
+            <span *ngIf="filters.controls[columnConfig.reference].value.operator == '!*'">IS EMPTY</span>
+
+            <div class="operators-list-wrapper">
+              <button mat-icon-button [matMenuTriggerFor]="menu" tabindex="-1"><mat-icon>more_vert</mat-icon></button>
+              <mat-menu #menu="matMenu" class="operators-list">
+                <button mat-menu-item *ngFor="let operatorObj of operators" (click)="onOperatorMenuChange(filters.controls[columnConfig.reference], operatorObj)" [ngClass]="{'operator-selected': operatorObj.operator == filters.controls[columnConfig.reference].value.operator}">{{operatorObj.name}}</button>
+              </mat-menu>
+            </div>
+          </div>
+
+          <div class="date-input" *ngIf="columnConfig.disableFilter != true && filters.controls[columnConfig.reference].value.filterType == 'dateRange'">
+            <mat-date-range-input [rangePicker]="picker" class="header-filter" style="display: none;">
+              <input matStartDate placeholder="DD-MM-YYYY" formControlName='value1' >
+              <input matEndDate placeholder="DD-MM-YYYY" formControlName='value2'>
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker" class="header-filter" tabindex="-1"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker class="header-filter">
+              <mat-date-range-picker-actions>
+                <button mat-button (click)="onClearFilter(filters.controls[columnConfig.reference].value); picker.close()">Clear</button>
+                <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
+              </mat-date-range-picker-actions>
+            </mat-date-range-picker>
+          </div>
+
+          <div class="number-input" *ngIf="columnConfig.disableFilter != true && filters.controls[columnConfig.reference].value.filterType == 'numberRange'">
+            <input matInput placeholder="From" [attr.header-filter]="'from_'+columnConfig.reference "   type="text" class="header-filter"  formControlName='value1' autocomplete="off">
+            <input matInput placeholder="To"  [attr.header-filter]="'to_'+columnConfig.reference"    type="text" class="header-filter"  formControlName='value2' autocomplete="off">
+          </div>
+        </th>
+      </ng-container>
+    </form>
+
+    <!--Loading row-->
+    <ng-container matColumnDef="loading-progress">
+        <th mat-header-cell *matHeaderCellDef [attr.colspan]="displayedColumns.length">
+            <mat-progress-bar mode="indeterminate" *ngIf="isLoading" color="accent"></mat-progress-bar>
+        </th>
+    </ng-container>
+
+    <!--Header rows-->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <div *ngIf="configs.showAdvancedFilter">
+      <tr mat-header-row class="advanced-filters" *matHeaderRowDef="filterColumns"></tr>
+    </div>
+    <tr mat-header-row *matHeaderRowDef="['loading-progress']" class="loading-progress-row"></tr>
+
+    <!--Table rows-->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.example-expanded-row]="configs.rowExpandable && expandedRow == row" (click)="_onRowClick(row)" [attr.id]="row.ID" [ngClass]="{'selected': configs.rowSelectable && isSelected(row), 'hovered': configs.rowHoverable}"></tr>
+
+    <!--Nested Table rows-->
+    <div *ngIf="configs.rowExpandable">
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" style="height: 0;"></tr>
+    </div>
+
+    <!--Placeholder Row - shown when there is no matching data that will be provided to the wrapper table. -->
+    <tr class="mat-row placeholder-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          <div *ngIf="dataSource.data.length === 0 && (configs.emptyTablePlaceholder || configs.placeholderButtonText) && !isLoading" class="no-data-con">
+            <p>
+              {{configs.emptyTablePlaceholder}}
+              <a class="button margin-top-s" *ngIf="configs.placeholderButtonText" (click)="onPlaceholderButtonClick.emit()">{{configs.placeholderButtonText | titlecase}}</a>
+            </p>
+          </div>
+        </td>
+    </tr>
+  </table>
+</div>

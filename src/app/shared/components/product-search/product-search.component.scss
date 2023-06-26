@@ -1,0 +1,30 @@
+::ng-deep fliproom-list.product-list ion-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2em;
+
+    ion-card-content {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+
+
+@media screen and (min-width: 900px) {
+    ::ng-deep fliproom-list.product-list ion-list {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+}
+
+@media(min-width: 600px) {
+    ::ng-deep fliproom-list.product-list ion-list {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+//for some reason global.css vars are not working
+::ng-deep ion-card {
+    border-radius: 10px !important;
+}

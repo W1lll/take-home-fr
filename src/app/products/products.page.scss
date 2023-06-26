@@ -1,0 +1,28 @@
+::ng-deep fliproom-list.product-list ion-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 2em;
+
+  ion-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  div.img-wrapper {
+    height: 100px;
+
+    img {
+      height: 100%;
+      width: auto;
+      margin: auto;
+      display: block;
+    }
+  }
+
+}
+
+td {
+  .img-wrapper img {
+    max-height: 2em;
+  }
+}

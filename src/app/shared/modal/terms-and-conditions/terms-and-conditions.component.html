@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h1>Consignor Platform Terms of Agreement</h1>
+</div>
+<div class="modal-body" (scroll)="onScroll($event)">
+    <h2>Commission Rates</h2>
+    <p>Sale prices within the below brackets will be subject to the specified commission
+        rates. These are automatically applied to show your final payout price after an item
+        sales.
+    </p>
+    <ul>
+        <li>£0-£320 per item is 26%</li>
+        <li>£321-£999 per item is 22%</li>
+        <li>£1000-10000 per item is 17%</li>
+    </ul>
+    <p>
+        When Pricing ALWAYS set your prices at .99 for example £159.99 <br><br>
+        The ownership is down to you to make sure your inventory is up to date and accurate at all times. <br><br>
+        As soon as you no longer have an item available for sale, it must be removed from your inventory on the platform. <br><br>
+        If your payout expectation changes, this must be adjusted on the platform. <br><br>
+        When uploading an item it will show you the cheapest price we have live at the moment.
+        (With this in mind price accordingly, as the website will list & sell the lowest priced first) <br><br>
+        When we sell your item, you will be notified via email, you then must accept this within 12hrs. <br><br>
+        Any orders not accepted within this time will be rejected and the sale will be lost. <br><br>
+        Any rejected orders will be subject to a 7% penalty charge to cover transactional fees. <br><br>
+        We cover all shipping & create shipment labels for you. <br><br>
+        Once you have accepted a sale we will send a label to you directly via email or WhatsApp. <br><br>
+        You must then use the tracking number from the shipment label and input this onto the platform to confirm shipment has been made. <br><br>
+        As soon as tracking has been input to the order your payout will be released. <br><br>
+        All shipments must be dropped off within 24 hours of receiving shipment label. <br><br>
+    </p>
+    <p>
+        By agreeing to these terms you are subject to follow them. Failure to do so, could result in being removed from the platform.
+    </p>
+</div>
+<div class="modal-footer">
+    <button mat-flat-button (click)="onConfirm()" color="primary" [disabled]="!userRead">{{'main.agree' | titlecase}}</button>
+</div>
