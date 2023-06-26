@@ -9,6 +9,9 @@ import { Product, ProductCategory, ProductVariant } from '../shared/models/Produ
 import { UtilService } from './util.service'
 import { MarketplaceOffer, MarketplaceOfferInterface } from '../shared/models/MarketplaceOffer'
 import { InventoryRecord, InventoryListing } from '../shared/models/InventoryRecord'
+import { Item } from '../shared/models/Item.model'
+
+import get from 'lodash.get';
 
 export interface ApiListResponse {
   count: number
@@ -89,14 +92,50 @@ export class ApiService {
     let query = of(!filters.public ?this.privateProducts: this.publicProducts)
     return query.pipe(
         map((_response: QueryResponse) => {
-          return {
-            data: _response.rows.map(product =>
-              new Product(product)
-            ),
-            count: _response.count
+          let products = _response.rows.map(product => new Product(product));
+          for (let key in filters) {
+            if (['accountID', 'public', 'status'].includes(key)) {}
+            else {products = this.filterData(key, filters[key], products);}
           }
+          return {
+            data: products,
+            count: _response.count
+          };
         })
       )
+  }
+
+  filterData (filterBy: string, filterValue: string, products: Product[]) {
+    if (filterBy == 'createdAt') {
+      const filterDate: String = new Date(filterValue).toLocaleDateString('en-UK');
+      products = products.filter(item => new Date(get(item, filterBy)).toLocaleDateString('en-UK') == filterDate);
+    } else if (filterValue != undefined) {
+      switch (filterValue[0]) {
+        case '~': // Include
+          products = products.filter(item => {
+            const value = get(item, filterBy);
+            return value !== null && value != undefined && value.toString().includes(filterValue.slice(1));
+          });
+          break;
+        case '!': // Exclude
+          if (filterValue[1] == '*' && filterValue.length == 2) { // Is Empty
+            products = products.filter(item => get(item, filterBy) == '' || get(item, filterBy) == null);
+          } else {
+            products = products.filter(item => {
+              const value = get(item, filterBy);
+              return value != null && value != undefined && !value.toString().includes(filterValue.slice(1));
+            });
+          }
+          break;
+        case '*': // Is Not Empty
+          products = products.filter(item => get(item, filterBy) != '' || get(item, filterBy) != null);
+          break;
+        default:
+          products = products.filter(item => get(item, filterBy) == filterValue);
+          break;
+      }
+    }
+    return products;
   }
 
 

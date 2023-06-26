@@ -5,7 +5,7 @@ import { MatColumnDef, MatHeaderRowDef, MatNoDataRow, MatRowDef, MatTable, MatTa
 import { forkJoin, merge, Observable, Subject, Subscription} from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { UserService } from 'src/app/core/user.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { ApiService, QueryResponse } from 'src/app/core/api.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
