@@ -109,6 +109,14 @@ export class ApiService {
     if (filterBy == 'createdAt') {
       const filterDate: String = new Date(filterValue).toLocaleDateString('en-UK');
       products = products.filter(item => new Date(get(item, filterBy)).toLocaleDateString('en-UK') == filterDate);
+    } else if (filterBy == 'search') {
+      products = products.filter(item => {
+        return  item.title.includes(filterValue.toLowerCase()) ||
+                item.code.includes(filterValue.toUpperCase()) ||
+                item.ID.toString().includes(filterValue)
+      });
+      console.log(filterValue);
+      console.log(products);
     } else if (filterValue != undefined) {
       switch (filterValue[0]) {
         case '~': // Include
