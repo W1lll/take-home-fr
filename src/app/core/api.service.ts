@@ -106,23 +106,23 @@ export class ApiService {
   }
 
   filterData (filterBy: string, filterValue: string, products: Product[]) {
+    console.log(filterBy, filterValue)
+    typeof filterValue === 'number' ? filterValue = filterValue : filterValue = filterValue.toLowerCase();
     if (filterBy == 'createdAt') {
       const filterDate: String = new Date(filterValue).toLocaleDateString('en-UK');
       products = products.filter(item => new Date(get(item, filterBy)).toLocaleDateString('en-UK') == filterDate);
     } else if (filterBy == 'search') {
       products = products.filter(item => {
-        return  item.title.includes(filterValue.toLowerCase()) ||
-                item.code.includes(filterValue.toUpperCase()) ||
+        return  item.title.toLowerCase().includes(filterValue.toLowerCase()) ||
+                item.code.toLowerCase().includes(filterValue) ||
                 item.ID.toString().includes(filterValue)
       });
-      console.log(filterValue);
-      console.log(products);
     } else if (filterValue != undefined) {
       switch (filterValue[0]) {
         case '~': // Include
           products = products.filter(item => {
             const value = get(item, filterBy);
-            return value !== null && value != undefined && value.toString().includes(filterValue.slice(1));
+            return value !== null && value != undefined && value.toString().toLowerCase().includes(filterValue.slice(1));
           });
           break;
         case '!': // Exclude
@@ -131,7 +131,7 @@ export class ApiService {
           } else {
             products = products.filter(item => {
               const value = get(item, filterBy);
-              return value != null && value != undefined && !value.toString().includes(filterValue.slice(1));
+              return value != null && value != undefined && !value.toString().toLowerCase().includes(filterValue.slice(1));
             });
           }
           break;
@@ -139,7 +139,11 @@ export class ApiService {
           products = products.filter(item => get(item, filterBy) != '' || get(item, filterBy) != null);
           break;
         default:
-          products = products.filter(item => get(item, filterBy) == filterValue);
+          products = products.filter(item => {
+            let value = get(item, filterBy);
+            typeof value === 'number' ? value = value : value = value.toLowerCase();
+            return value == filterValue;
+          });
           break;
       }
     }
@@ -151,8 +155,13 @@ export class ApiService {
     let params = this.utils.buildParams(pageIdx, pageSize, sort, filters)
     return of(!filters['product.public'] ? this.privateVariants(): this.publicVariants()).pipe(
         map((_response: any) => {
+          let variants = _response.rows.map(variant => new ProductVariant(variant))
+          for (let key in filters) {
+            if (['accountID', 'product.accountID', 'public', 'product.public', 'status', 'product.status'].includes(key)) {}
+            else {variants = this.filterData(key, filters[key], variants);}
+          }
           return {
-            data: _response.rows.map(variant => new ProductVariant(variant)),
+            data: variants,
             count: _response.count
           }
         })
