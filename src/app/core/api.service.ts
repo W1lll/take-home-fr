@@ -105,49 +105,51 @@ export class ApiService {
       )
   }
 
-  filterData (filterBy: string, filterValue: string, products: Product[]) {
-    console.log(filterBy, filterValue)
+  filterData(filterBy: string, filterValue: string, products: Product[]) {
     typeof filterValue === 'number' ? filterValue = filterValue : filterValue = filterValue.toLowerCase();
-    if (filterBy == 'createdAt') {
-      const filterDate: String = new Date(filterValue).toLocaleDateString('en-UK');
-      products = products.filter(item => new Date(get(item, filterBy)).toLocaleDateString('en-UK') == filterDate);
-    } else if (filterBy == 'search') {
-      products = products.filter(item => {
-        return  item.title.toLowerCase().includes(filterValue.toLowerCase()) ||
-                item.code.toLowerCase().includes(filterValue) ||
-                item.ID.toString().includes(filterValue)
-      });
-    } else if (filterValue != undefined) {
-      switch (filterValue[0]) {
-        case '~': // Include
-          products = products.filter(item => {
-            const value = get(item, filterBy);
-            return value !== null && value != undefined && value.toString().toLowerCase().includes(filterValue.slice(1));
-          });
-          break;
-        case '!': // Exclude
-          if (filterValue[1] == '*' && filterValue.length == 2) { // Is Empty
-            products = products.filter(item => get(item, filterBy) == '' || get(item, filterBy) == null);
-          } else {
-            products = products.filter(item => {
-              const value = get(item, filterBy);
-              return value != null && value != undefined && !value.toString().toLowerCase().includes(filterValue.slice(1));
-            });
+
+    switch (filterBy) {
+      case 'createdAt':
+        const filterDate: string = new Date(filterValue).toLocaleDateString('en-UK');
+        return products.filter(item => new Date(get(item, filterBy)).toLocaleDateString('en-UK') === filterDate);
+
+      case 'search':
+        return products.filter(item => {
+          const lowercaseTitle = item.title.toLowerCase();
+          const lowercaseCode = item.code.toLowerCase();
+          const lowercaseID = item.ID.toString();
+          return lowercaseTitle.includes(filterValue) ||
+                 lowercaseCode.includes(filterValue) ||
+                 lowercaseID.includes(filterValue);
+        });
+
+      case 'sourceProductID':
+        return products;
+
+      default:
+        return products.filter(item => {
+          const value = get(item, filterBy);
+          const lowercaseValue = typeof value === 'number' ? value.toString() : value.toLowerCase();
+
+          switch (filterValue[0]) {
+            case '~': // Include
+              return lowercaseValue.includes(filterValue.slice(1));
+
+            case '!': // Exclude
+              if (filterValue === '!*' && filterValue.length === 2) { // Is Empty
+                return value === '' || value === null;
+              } else {
+                return !lowercaseValue.includes(filterValue.slice(1));
+              }
+
+            case '*': // Is Not Empty
+              return value !== '' && value !== null;
+
+            default:
+              return lowercaseValue === filterValue;
           }
-          break;
-        case '*': // Is Not Empty
-          products = products.filter(item => get(item, filterBy) != '' || get(item, filterBy) != null);
-          break;
-        default:
-          products = products.filter(item => {
-            let value = get(item, filterBy);
-            typeof value === 'number' ? value = value : value = value.toLowerCase();
-            return value == filterValue;
-          });
-          break;
-      }
+        });
     }
-    return products;
   }
 
 
