@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core'
 import { Observable, of } from 'rxjs'
-import { HttpClient, HttpParams } from '@angular/common/http'
-import { environment } from 'src/environments/environment'
-import { Account, UserService } from './user.service'
-import { filter, map, mergeMap } from 'rxjs/operators'
+import { HttpClient } from '@angular/common/http'
+import { UserService } from './user.service'
+import { map } from 'rxjs/operators'
 import { Product, ProductCategory, ProductVariant } from '../shared/models/Product.model'
 
 import { UtilService } from './util.service'
-import { MarketplaceOffer, MarketplaceOfferInterface } from '../shared/models/MarketplaceOffer'
-import { InventoryRecord, InventoryListing } from '../shared/models/InventoryRecord'
-import { Item } from '../shared/models/Item.model'
+import { MarketplaceOffer } from '../shared/models/MarketplaceOffer'
+import { InventoryListing } from '../shared/models/InventoryRecord'
 
 import get from 'lodash.get';
 
@@ -97,8 +95,17 @@ export class ApiService {
             if (['accountID', 'public', 'status'].includes(key)) {}
             else {products = this.filterData(key, filters[key], products);}
           }
+
+
+          const startIndex = pageIdx * pageSize;
+          const endIndex = startIndex + pageSize;
+          const slicedProducts = products.slice(startIndex, endIndex);
+          console.log(startIndex)
+          console.log(endIndex)
+          console.log(slicedProducts)
+
           return {
-            data: products,
+            data: slicedProducts,
             count: _response.count
           };
         })
@@ -114,14 +121,9 @@ export class ApiService {
         return products.filter(item => new Date(get(item, filterBy)).toLocaleDateString('en-UK') === filterDate);
 
       case 'search':
-        return products.filter(item => {
-          const lowercaseTitle = item.title.toLowerCase();
-          const lowercaseCode = item.code.toLowerCase();
-          const lowercaseID = item.ID.toString();
-          return lowercaseTitle.includes(filterValue) ||
-                 lowercaseCode.includes(filterValue) ||
-                 lowercaseID.includes(filterValue);
-        });
+        return products.filter(item => item.title.toLowerCase().includes(filterValue) ||
+                                        item.code.toLowerCase().includes(filterValue) ||
+                                        item.ID.toString().includes(filterValue));
 
       case 'sourceProductID':
         return products;
@@ -151,7 +153,6 @@ export class ApiService {
         });
     }
   }
-
 
   getVariantsList (pageIdx: number, pageSize: number, sort: string = null, filters) {
     let params = this.utils.buildParams(pageIdx, pageSize, sort, filters)
@@ -202,9 +203,6 @@ export class ApiService {
       map(product => new Product(product))
     );
   }
-
-
-
 
   updateProduct(productID: number, updates: Object): Observable<Product> {
     const prod = this.privateProducts.rows.find(p => p.ID === productID)
