@@ -96,13 +96,9 @@ export class ApiService {
             else {products = this.filterData(key, filters[key], products);}
           }
 
-
           const startIndex = pageIdx * pageSize;
           const endIndex = startIndex + pageSize;
           const slicedProducts = products.slice(startIndex, endIndex);
-          console.log(startIndex)
-          console.log(endIndex)
-          console.log(slicedProducts)
 
           return {
             data: slicedProducts,
@@ -192,7 +188,6 @@ export class ApiService {
   }
 
   getProduct (productID: number) : Observable<Product> {
-    console.log('getProduct', productID)
     const allProds = this.privateProducts.rows.concat(this.publicProducts.rows)
     const prod = allProds.find(p => p.ID == productID)
     return of(prod).pipe(map(product => new Product(product)))
